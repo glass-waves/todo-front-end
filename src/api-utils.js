@@ -1,6 +1,6 @@
 import request from "superagent";
 
-const URL = 'http://localhost:3000';
+const URL = 'https://ancient-oasis-74313.herokuapp.com';
 
 
 export async function signupUser(email, password) {

@@ -77,6 +77,7 @@ header button {
 }
 .todo:hover {
     background-color: lightcyan;
+    cursor: pointer;
 }
 .completed {
     text-decoration: line-through;
