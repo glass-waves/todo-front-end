@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { signupUser } from '../api-utils.js'
 
 export default class SignupPage extends Component {
     state = {
@@ -15,9 +16,16 @@ export default class SignupPage extends Component {
             password: e.target.value
         })
     }
-    handleSubmit = e => {
+    handleSubmit = async (e) => {
         e.preventDefault();
 
+        const user = await signupUser(this.state.email, this.state.password)
+
+        const token = user.token;
+
+        this.props.handleToken(token)
+
+        console.log(token)
     }
 
     render() {

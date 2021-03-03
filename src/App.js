@@ -1,46 +1,67 @@
 import './App.css';
-import  HomePage  from './HomePage.js';
-import  LoginPage  from './Auth/LoginPage.js';
-import  SignupPage  from './Auth/SignupPage.js';
-import  TodoListPage  from './TodoListPage.js';
+import HomePage from './HomePage.js';
+import LoginPage from './Auth/LoginPage.js';
+import SignupPage from './Auth/SignupPage.js';
+import TodoListPage from './TodoListPage.js';
 import Header from './components/Header.js'
 import React, { Component } from 'react'
 import {
-    BrowserRouter as Router, 
-    Route, 
+    BrowserRouter as Router,
+    Route,
     Switch,
 } from 'react-router-dom';
+import { getTokenFromLocalStorage, putTokenInLocalStorage } from './local-storage-utils';
 
 
 
 
 
 export default class App extends Component {
+    state = {
+        token: getTokenFromLocalStorage()
+    }
+
+    handleToken = (token) => {
+        this.setState({
+            token
+        })
+        
+        putTokenInLocalStorage(token);
+    }
+
+
     render() {
+        console.log('state in app.js', this.state)
         return (
             <div>
                 <Router>
                     <Header />
                     <Switch>
-                        <Route 
-                            path="/" 
+                        <Route
+                            path="/"
                             exact
-                            component={HomePage} 
+                            component={HomePage}
                         />
-                        <Route 
-                            path="/login" 
+                        <Route
+                            path="/login"
                             exact
-                            component={LoginPage} 
-                        />            
-                        <Route 
-                            path="/signup" 
-                            exact
-                            component={SignupPage} 
+                            render={(props) => (
+                                <LoginPage {...props} handleToken={this.handleToken} />
+                            )}
                         />
-                        <Route 
-                            path="/todo" 
+                        <Route
+                            path="/signup"
                             exact
-                            component={TodoListPage} 
+                            render={(props) => (
+                                <SignupPage {...props} handleToken={this.handleToken} />
+                            )}
+                        />
+                        <Route
+                            path="/todo"
+                            exact
+                            render={(props) => (
+                                <TodoListPage {...props} token={this.state.token} />
+                            )}
                         />
                     </Switch>
                 </Router>
