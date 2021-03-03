@@ -21,6 +21,7 @@ export default class TodoListPage extends Component {
 
     handleCompleted = async (todoId) => {
         await completeListItem(todoId, this.props.token)
+        this.fetchTodoList();
     }
     
     handleInputChange = (e) => {
@@ -36,17 +37,25 @@ export default class TodoListPage extends Component {
 
     render() {
         return (
-            <div>
-                <label>
-                    Add an item to the todo list:
-                <input type="text" value={this.state.togo} onChange={this.handleInputChange}/>
-                </label>
-                <button onClick={this.addItemHandler}>Add Item</button>
+            <div className="listCont">
+                <div className="add">
+                    <label>
+                        Add an item to the todo list:
+                    <input type="text" value={this.state.togo} onChange={this.handleInputChange}/>
+                    </label>
+                    <button onClick={this.addItemHandler}>Add Item</button>
+                </div>
+                
                 {this.state.todos.length < 1 && <p>Nothing to do yet!</p>}
                 {this.state.todos.map(todo =>
                     <p 
                     key={`{todo.todo}`}
                     onClick={() => this.handleCompleted(todo.id)}
+                    className={`
+                    todo ${todo.completed 
+                        ? 'completed' 
+                        : ''}`
+                    }
                     >
                         {todo.todo}
                     </p>)

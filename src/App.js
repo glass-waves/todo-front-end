@@ -4,6 +4,7 @@ import LoginPage from './Auth/LoginPage.js';
 import SignupPage from './Auth/SignupPage.js';
 import TodoListPage from './TodoListPage.js';
 import Header from './components/Header.js'
+import PrivateRoute from './components/PrivateRoute.js'
 import React, { Component } from 'react'
 import {
     BrowserRouter as Router,
@@ -11,8 +12,6 @@ import {
     Switch,
 } from 'react-router-dom';
 import { getTokenFromLocalStorage, putTokenInLocalStorage } from './local-storage-utils';
-
-
 
 
 
@@ -25,17 +24,24 @@ export default class App extends Component {
         this.setState({
             token
         })
-        
         putTokenInLocalStorage(token);
     }
-
+    handleLogout = () => {
+        this.setState({
+            token: ''
+        })
+        putTokenInLocalStorage('');
+    }
 
     render() {
         console.log('state in app.js', this.state)
         return (
             <div>
                 <Router>
-                    <Header />
+                    <Header 
+                    handleLogout={this.handleLogout} 
+                    token = {this.state.token}
+                    />
                     <Switch>
                         <Route
                             path="/"
@@ -56,12 +62,15 @@ export default class App extends Component {
                                 <SignupPage {...props} handleToken={this.handleToken} />
                             )}
                         />
-                        <Route
+                        <PrivateRoute
                             path="/todo"
                             exact
-                            render={(props) => (
-                                <TodoListPage {...props} token={this.state.token} />
-                            )}
+                            token={this.state.token}
+                            render={(routerProps) =>
+                                <TodoListPage
+                                    user={this.state.token}
+                                    {...routerProps}
+                                />}
                         />
                     </Switch>
                 </Router>

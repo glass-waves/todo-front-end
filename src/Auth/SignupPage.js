@@ -18,20 +18,17 @@ export default class SignupPage extends Component {
     }
     handleSubmit = async (e) => {
         e.preventDefault();
-
         const user = await signupUser(this.state.email, this.state.password)
-
         const token = user.token;
-
         this.props.handleToken(token)
-
-        console.log(token)
+        this.props.history.push('/todo')
     }
 
     render() {
         console.log(this.state)
         return (
             <div>
+                <h1>Sign Up</h1>
                 <form onSubmit={this.handleSubmit}>
                     <label htmlFor="">
                         Email:

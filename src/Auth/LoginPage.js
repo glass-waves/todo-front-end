@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { NavLink } from 'react-router-dom'
 import { loginUser } from '../api-utils.js'
 
 export default class LoginPage extends Component {
@@ -20,16 +21,15 @@ export default class LoginPage extends Component {
         e.preventDefault();
 
         const user = await loginUser(this.state.email, this.state.password);
-
         const token = user.token;
-
         this.props.handleToken(token)
+        this.props.history.push('/todo')
     }
 
     render() {
         console.log(this.state)
         return (
-            <div>
+            <div className="formCont">
                 <form onSubmit={this.handleSubmit}>
                     <label htmlFor="">
                         Email:
@@ -42,6 +42,7 @@ export default class LoginPage extends Component {
                     </label>
                     <button>Submit</button>
                 </form>
+                <NavLink to='/signup'>Don't have an account? Click here to sign up.</NavLink>
             </div>
         )
     }
